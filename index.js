@@ -6,7 +6,6 @@ import studentRouter from './routers/studentRouter.js';
 import jwt from "jsonwebtoken";
 
 
-
 const app = express();
 
 app.use(bodyParser.json());
