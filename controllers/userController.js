@@ -87,3 +87,21 @@ export function loginUser(req, res) {
     );
 
 }
+
+
+
+//admin function 
+
+export function isAdmin(req) {
+    if (req.user == null) {
+        return false; // If no user is logged in, return false
+    }
+
+    if (req.user.role == "admin") {
+        return true; // If the user is an admin, return true
+    }else {
+        return false; // If the user is not an admin, return false
+    }
+
+   
+}

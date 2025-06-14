@@ -2,8 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import userRouter from './routers/userRouter.js';
-import studentRouter from './routers/studentRouter.js';
 import jwt from "jsonwebtoken";
+import productRouter from './routers/productRouter.js';
+
 
 
 const app = express();
@@ -66,7 +67,7 @@ mongoose.connect(connectionString).then(
 //routes
 
 app.use("/users", userRouter);
-app.use("/student", studentRouter);
+app.use("/products", productRouter);
 
 
 app.listen(3000, () => {
