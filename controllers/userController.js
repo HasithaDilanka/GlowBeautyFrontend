@@ -1,6 +1,8 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";                                 // Importing bcrypt for password hashing
 import jwt from "jsonwebtoken";                           // Importing jsonwebtoken for token generation
+import dotenv from 'dotenv';                           // Importing dotenv to manage environment variables
+dotenv.config(); // Load environment variables from .env file 
 
 export function createUser(req, res) {
 
@@ -65,7 +67,8 @@ export function loginUser(req, res) {
                             image: user.image,
 
                         },
-                        "hasitha", // Replace with your secret key
+                        process.env.JWT_SERET, // Use the secret from environment variables
+                       
                     );
 
                     res.json({

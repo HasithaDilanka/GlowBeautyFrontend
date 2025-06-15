@@ -5,6 +5,9 @@ import userRouter from './routers/userRouter.js';
 import jwt from "jsonwebtoken";
 import productRouter from './routers/productRouter.js';
 
+import dotenv from 'dotenv';
+dotenv.config(); // Load environment variables from .env file
+
 
 
 const app = express();
@@ -23,9 +26,9 @@ app.use(
             const token = value.replace("Bearer ", "")
             jwt.verify(
                 token,
-                "hasitha",
+                process.env.JWT_SERET, // Use the secret from environment variables
                 (err, decoded) => {
-                    console.log(decoded);
+                    console.log(decoded); 
                     if (decoded == null) {
                         res.status(403).json({
                             message: "Unautherized"
@@ -50,7 +53,7 @@ app.use(
 //db connection
 
 
-let connectionString = "mongodb+srv://admin:123@cluster0.uk6zfdo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";  //mongodb ekata connect wenna ona connection string eka
+let connectionString = process.env.MONGO_URI;
 
 mongoose.connect(connectionString).then(
     () => {
@@ -66,9 +69,8 @@ mongoose.connect(connectionString).then(
 
 //routes
 
-app.use("/users", userRouter);
-app.use("/products", productRouter);
-
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");
