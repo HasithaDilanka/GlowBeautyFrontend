@@ -10,7 +10,7 @@ export default function TestPage() {
     }
 
     function decrement() {
-        setCount(count - 1);
+        setCount(count - 1); 
     }
 
 

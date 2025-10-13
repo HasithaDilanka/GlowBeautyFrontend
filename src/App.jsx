@@ -5,24 +5,26 @@ import LoginPage from "./pages/loginPage";
 import RegisterPage from "./pages/registerPage";
 import AdminPage from "./pages/adminPage";
 import TestPage from "./pages/testPage";
+import { Toaster } from "react-hot-toast";
 
 
 function App() {
   return (
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="">
         <div className="">
-          <div className="">
-            <Routes path="/">
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/test" element={<TestPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/admin/*" element={<AdminPage />} />
-            </Routes>
-          </div>
+          <Toaster position="top-right" />         {/* allert daddi dana eka  */}
+          <Routes path="/">
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/admin/*" element={<AdminPage />} />
+          </Routes>
         </div>
-      </BrowserRouter>
-  
+      </div>
+    </BrowserRouter>
+
   );
 }
 
