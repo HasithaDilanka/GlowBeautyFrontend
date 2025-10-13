@@ -6,11 +6,15 @@ import jwt from "jsonwebtoken";
 import productRouter from './routers/productRouter.js';
 
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 dotenv.config(); // Load environment variables from .env file
 
 
 
 const app = express();
+
+app.use(cors()); // Enable CORS for all routes
 
 app.use(bodyParser.json());
 
