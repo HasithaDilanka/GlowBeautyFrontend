@@ -35,8 +35,7 @@ export default function Footer() {
                             <li><Link to="#" className="text-blue-300 hover:text-white">Makeup</Link></li>
                             <li><Link to="#" className="text-blue-300 hover:text-white">Fragrance</Link></li>
                             <li><Link to="#" className="text-blue-300 hover:text-white">Hair Care</Link></li>
-                            <li><Link to="#" className="text-blue-300 hover:text-white">Body Care</Link></li>
-                          
+                           
                         </ul>
                     </div>
 
