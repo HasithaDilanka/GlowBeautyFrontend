@@ -17,7 +17,7 @@ export default function Footer() {
                                 className="w-12 h-12 mr-2"
                             />
                             <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                                GlowBeauty
+                                GlowBeauty 
                             </h2>
                         </div>
                         <p className="text-blue-200 mb-4 leading-relaxed">
