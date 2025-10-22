@@ -1,6 +1,7 @@
 // File: AdminPage.jsx
 
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { FaBoxOpen, FaCube, FaRegComment, FaRegUser, FaSignOutAlt } from "react-icons/fa";
 import { MdBorderColor, MdDashboard } from "react-icons/md";
 import React, { useState, useEffect } from "react";
@@ -21,6 +22,8 @@ import Chart1 from "../../components/chart_1";
 import Chart2 from "../../components/chart_2";
 import Messages from "./customerMessages";
 import { icon } from "leaflet";
+import Loader from "../../components/loader";
+import axios from "axios";
 
 
 // Import Charts
@@ -225,9 +228,41 @@ function PanelCard() {
     </div>
   );
 }
-
 export default function AdminPage() {
+
+  const navigate = useNavigate();
+
   const location = useLocation();
+
+  const [adminValidated, setAdminValiadated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      toast.error("you are not logged in");
+      navigate("/login");
+    } else {
+      axios.get(import.meta.env.VITE_BACKEND_URL + "/api/users/", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      }).then((response) => {
+        if (response.data.role === "admin") {
+          setAdminValiadated(true);
+        } else {
+          toast.error("You are not authorized");
+          navigate("/login");
+        }
+      }).catch((error) => {
+        toast.error("You are not authorized");
+        navigate("/login");
+      });
+    }
+  }, []);
+
+
+
+
 
   const menuItems = [
     { path: "/admin", icon: MdDashboard, label: "Dashboard", exact: true },
@@ -251,98 +286,98 @@ export default function AdminPage() {
 
   return (
     <div className="w-full h-screen flex bg-gray-50">
-      <div className="w-[280px] h-full bg-white shadow-xl border-r border-gray-200">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-100">
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-3">
-              <img
-                className="w-12 h-12 text-white"
-                src="src/assets/logo.png"
-                alt="Logo"
-              />
-            </div>
-            Admin Panel
-          </h1>
-        </div>
+      {adminValidated ? <>
+        <div className="w-[280px] h-full bg-white shadow-xl border-r border-gray-200">
+          {/* Header */}
+          <div className="p-6 border-b border-gray-100">
+            <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-3">
+                <img
+                  className="w-12 h-12 text-white"
+                  src="src/assets/logo.png"
+                  alt="Logo"
+                />
+              </div>
+              Admin Panel
+            </h1>
+          </div>
 
-        {/* Navigation Menu */}
-        <nav className="py-4 px-3">
-          <div className="space-y-1">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = isActiveLink(item.path, item.exact);
+          {/* Navigation Menu */}
+          <nav className="py-4 px-3">
+            <div className="space-y-1">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = isActiveLink(item.path, item.exact);
 
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`
                     group flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                    ${
-                      isActive
+                    ${isActive
                         ? "bg-blue-50 text-blue-700 border-r-4 border-blue-700"
                         : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }
+                      }
                   `}
-                >
-                  <Icon
-                    className={`
+                  >
+                    <Icon
+                      className={`
                       mr-3 h-5 w-5 transition-colors duration-200
-                      ${
-                        isActive
+                      ${isActive
                           ? "text-blue-700"
                           : "text-gray-400 group-hover:text-gray-500"
-                      }
+                        }
                     `}
-                  />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-
-        {/* User Section */}
-        <div className="absolute bottom-0 w-[280px] p-4 border-t border-gray-100">
-          <div className="flex items-center mb-3">
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center ml-2">
-              <FaRegUser className="text-gray-600 text-sm" />
+                    />
+                    {item.label}
+                  </Link>
+                );
+              })}
             </div>
-            <Link
-              to="/adminProfile"
-              className="text-blue-500 hover:text-blue-600 ml-3"
+          </nav>
+
+          {/* User Section */}
+          <div className="absolute bottom-0 w-[280px] p-4 border-t border-gray-100">
+            <div className="flex items-center mb-3">
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center ml-2">
+                <FaRegUser className="text-gray-600 text-sm" />
+              </div>
+              <Link
+                to="/adminProfile"
+                className="text-blue-500 hover:text-blue-600 ml-3"
+              >
+                <p className="text-sm font-medium text-gray-700">Profile</p>
+
+              </Link>
+            </div>
+
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
             >
-              <p className="text-sm font-medium text-gray-700">Profile</p>
-              
-            </Link>
+              <FaSignOutAlt className="mr-3 h-4 w-4 text-gray-400" />
+              Sign Out
+            </button>
           </div>
-
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-          >
-            <FaSignOutAlt className="mr-3 h-4 w-4 text-gray-400" />
-            Sign Out
-          </button>
         </div>
-      </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col bg-gray-50">
-        <Routes path="/*">
-          <Route path="/" element={<PanelCard />} />
-          <Route path="/products" element={<ProductAdminPage />} />
-          <Route path="/newProduct" element={<AddProductAdminPage />} />
-          <Route path="/updateProduct" element={<UpdateProductAdminPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/users" element={<UserManagement />} />
-          <Route path="/newUser" element={<AddUserAdminPage />} />
-          <Route path="/editUser" element={<EditUserAdminPage />} />
-          <Route path="/messages" element={<Messages />} />
-   
-        </Routes>
-      </div>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col bg-gray-50">
+          <Routes path="/*">
+            <Route path="/" element={<PanelCard />} />
+            <Route path="/products" element={<ProductAdminPage />} />
+            <Route path="/newProduct" element={<AddProductAdminPage />} />
+            <Route path="/updateProduct" element={<UpdateProductAdminPage />} />
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/users" element={<UserManagement />} />
+            <Route path="/newUser" element={<AddUserAdminPage />} />
+            <Route path="/editUser" element={<EditUserAdminPage />} />
+            <Route path="/messages" element={<Messages />} />
+
+          </Routes>
+        </div>
+      </> : <Loader />}
     </div>
   );
 }
