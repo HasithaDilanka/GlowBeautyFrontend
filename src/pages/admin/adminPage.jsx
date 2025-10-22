@@ -228,7 +228,7 @@ function PanelCard() {
     </div>
   );
 }
-export default function AdminPage() {
+export default function AdminPage() { 
 
   const navigate = useNavigate();
 
