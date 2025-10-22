@@ -29,9 +29,9 @@ export default function Footer() {
 
                     
 
-                    {/* Customer Service */}
+                    {/* Service */}
                     <div className="flex-1 min-w-[180px]">
-                        <h4 className="text-lg font-semibold mb-4 text-blue-200">Customer Service</h4>
+                        <h4 className="text-lg font-semibold mb-4 text-blue-200">Service</h4>
                         <ul className="space-y-2">
                             <li><Link to="/contactUs" className="text-blue-300 hover:text-white">Contact Us</Link></li>
                             <li><Link to="/product" className="text-blue-300 hover:text-white">Product</Link></li>
